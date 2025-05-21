@@ -1,6 +1,6 @@
 @file:Suppress("FunctionName")
 
-package edu.dyds.movies
+package edu.dyds.movies.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
@@ -10,7 +10,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import edu.dyds.movies.MoviesDependencyInjector.getMoviesViewModel
+import edu.dyds.movies.di.MoviesDependencyInjector.getMoviesViewModel
+import edu.dyds.movies.presentation.detail.DetailScreen
+import edu.dyds.movies.presentation.home.HomeScreen
 
 private const val HOME = "home"
 

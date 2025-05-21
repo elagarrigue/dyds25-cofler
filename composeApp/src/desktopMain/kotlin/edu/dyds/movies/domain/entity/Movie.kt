@@ -1,4 +1,4 @@
-package edu.dyds.movies
+package edu.dyds.movies.domain.entity
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
