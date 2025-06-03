@@ -1,11 +1,10 @@
 package edu.dyds.movies.data.local
 
 import edu.dyds.movies.domain.entity.Movie
-import edu.dyds.movies.domain.entity.RemoteMovie
 
 interface LocalMovies {
-    fun getCachedMovies(): List<Movie>;
-    fun cacheMovies(movies: List<Movie>);
+    fun getCachedMovies(): List<Movie>
+    fun cacheMovies(movies: List<Movie>)
 }
 
 internal class LocalMoviesImpl : LocalMovies {
