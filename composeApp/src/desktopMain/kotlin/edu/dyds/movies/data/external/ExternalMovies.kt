@@ -8,8 +8,8 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 
 interface ExternalMovies {
-    suspend fun getPopularMovies(): List<Movie>;
-    suspend fun getMovieDetails(id: Int): Movie;
+    suspend fun getPopularMovies(): List<Movie>
+    suspend fun getMovieDetails(id: Int): Movie
 }
 
 internal class ExternalMoviesImpl(private val tmdbHttpClient: HttpClient) : ExternalMovies {
