@@ -7,11 +7,11 @@ import edu.dyds.movies.domain.repository.MoviesRepository
 private const val MIN_VOTE_AVERAGE = 6.0
 
 interface GetPopularMoviesUseCase {
-    suspend fun getPopularMovies(): List<QualifiedMovie>
+    suspend fun execute(): List<QualifiedMovie>
 }
 
 internal class GetPopularMoviesUseCaseImpl(private val repository: MoviesRepository): GetPopularMoviesUseCase {
-    override suspend fun getPopularMovies(): List<QualifiedMovie> = repository.getPopularMovies().sortAndMap()
+    override suspend fun execute(): List<QualifiedMovie> = repository.getPopularMovies().sortAndMap()
 
     private fun List<Movie>.sortAndMap(): List<QualifiedMovie> {
         return this

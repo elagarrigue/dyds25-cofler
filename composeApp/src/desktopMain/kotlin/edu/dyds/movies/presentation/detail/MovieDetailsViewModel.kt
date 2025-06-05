@@ -20,7 +20,7 @@ class MovieDetailsViewModel(private val getMovieDetailsUseCase: GetMovieDetailsU
             movieDetailStateMutableStateFlow.emit(
                 UiState(
                     isLoading = false,
-                    movie = getMovieDetailsUseCase.getMovieDetails(id)
+                    movie = getMovieDetailsUseCase.execute(id)
                 )
             )
         }

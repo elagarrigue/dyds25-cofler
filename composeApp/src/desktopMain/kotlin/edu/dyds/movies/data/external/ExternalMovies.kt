@@ -7,12 +7,12 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 
-interface ExternalMovies {
+interface ExternalMoviesSource {
     suspend fun getPopularMovies(): List<Movie>
     suspend fun getMovieDetails(id: Int): Movie
 }
 
-internal class ExternalMoviesImpl(private val tmdbHttpClient: HttpClient) : ExternalMovies {
+internal class ExternalMoviesImpl(private val tmdbHttpClient: HttpClient) : ExternalMoviesSource {
     override suspend fun getPopularMovies(): List<Movie> = getTMDBPopularMovies().results.map { it.toDomainMovie()}
 
     override suspend fun getMovieDetails(id: Int): Movie = getTMDBMovieDetails(id).toDomainMovie()

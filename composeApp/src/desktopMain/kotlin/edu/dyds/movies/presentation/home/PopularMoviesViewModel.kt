@@ -20,7 +20,7 @@ class PopularMoviesViewModel(private val getPopularMoviesUseCase: GetPopularMovi
             moviesStateMutableStateFlow.emit(
                 UiState(
                     isLoading = false,
-                    movies = getPopularMoviesUseCase.getPopularMovies()
+                    movies = getPopularMoviesUseCase.execute()
                 )
             )
         }
