@@ -1,8 +1,7 @@
 package edu.dyds.movies.data.external
 
 import edu.dyds.movies.domain.entity.Movie
-import edu.dyds.movies.domain.entity.RemoteMovie
-import edu.dyds.movies.domain.entity.RemoteResult
+
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
