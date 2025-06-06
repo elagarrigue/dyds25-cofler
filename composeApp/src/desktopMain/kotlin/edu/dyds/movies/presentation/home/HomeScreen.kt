@@ -33,7 +33,7 @@ import org.jetbrains.compose.resources.painterResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    viewModel: PopularMoviesViewModel,
+    viewModel: HomeViewModel,
     onGoodMovieClick: (Movie) -> Unit
 ) {
 
@@ -41,7 +41,7 @@ fun HomeScreen(
         viewModel.getAllMovies()
     }
 
-    val state by viewModel.moviesStateFlow.collectAsState(PopularMoviesViewModel.UiState())
+    val state by viewModel.moviesStateFlow.collectAsState(HomeViewModel.UiState())
 
     MaterialTheme {
         Surface {

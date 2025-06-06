@@ -31,9 +31,9 @@ import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(viewModel: MovieDetailsViewModel, id: Int, onBack: () -> Unit) {
+fun DetailScreen(viewModel: DetailViewModel, id: Int, onBack: () -> Unit) {
 
-    val state by viewModel.movieDetailStateFlow.collectAsState(MovieDetailsViewModel.UiState())
+    val state by viewModel.movieDetailStateFlow.collectAsState(DetailViewModel.UiState())
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
