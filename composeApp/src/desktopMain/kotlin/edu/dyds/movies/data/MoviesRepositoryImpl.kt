@@ -1,0 +1,29 @@
+package edu.dyds.movies.data
+
+import edu.dyds.movies.data.external.ExternalMoviesSource
+import edu.dyds.movies.data.local.LocalMoviesSource
+import edu.dyds.movies.domain.entity.Movie
+import edu.dyds.movies.domain.repository.MoviesRepository
+
+class MoviesRepositoryImpl(private val localMoviesSource: LocalMoviesSource, private val externalMoviesSource: ExternalMoviesSource): MoviesRepository {
+    override suspend fun getPopularMovies(): List<Movie> {
+        val localMovies = localMoviesSource.getMovies()
+
+        return localMovies.ifEmpty {
+            try {
+                externalMoviesSource.getPopularMovies().apply {
+                    localMoviesSource.setMovies(this)
+                }
+            } catch (e: Exception) {
+                emptyList()
+            }
+        }
+    }
+
+    override suspend fun getMovieDetails(id: Int) =
+        try {
+            externalMoviesSource.getMovieDetails(id)
+        } catch (e: Exception) {
+            null
+        }
+}
