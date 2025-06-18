@@ -4,7 +4,7 @@ import edu.dyds.movies.domain.repository.MoviesRepository
 import kotlin.test.Test
 import kotlinx.coroutines.test.runTest
 
-class TestGetMovieDetailUseCase {
+class GetMovieDetailUseCaseTest {
     private val movie1 = Movie(1, "title", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 5.0, 6.0)
 
     class FakeRepository(private val movie: Movie) : MoviesRepository {
@@ -15,7 +15,7 @@ class TestGetMovieDetailUseCase {
     }
 
     @Test
-    fun `execute debe retornar una película válida si existe`() = runTest {
+    fun `execute debe retornar una pelicula valida si existe`() = runTest {
         // arrange
         val repository = FakeRepository(movie1)
         val useCase = GetMovieDetailsUseCaseImpl(repository)

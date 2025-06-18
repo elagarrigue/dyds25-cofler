@@ -6,10 +6,10 @@ import edu.dyds.movies.data.external.ExternalMoviesSource
 import kotlinx.coroutines.test.runTest
 
 
-class TestRepository {
-    val Movie1 = Movie(1, "title", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 0.0, 0.0)
-    val Movie2 = Movie(2, "title2", "overview2", "releaseDate2", "poster2", "backdrop2", "originalTitle2", "originalLanguage2", 0.0, 0.0)
-    val Movie3 = Movie(3, "title3", "overview3", "releaseDate3", "poster3", "backdrop3", "originalTitle3", "originalLanguage3", 0.0, 0.0)
+class RepositoryTest {
+    private val movie1 = Movie(1, "title", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 0.0, 0.0)
+    private val movie2 = Movie(2, "title2", "overview2", "releaseDate2", "poster2", "backdrop2", "originalTitle2", "originalLanguage2", 0.0, 0.0)
+    private val movie3 = Movie(3, "title3", "overview3", "releaseDate3", "poster3", "backdrop3", "originalTitle3", "originalLanguage3", 0.0, 0.0)
 
     class ImplLocalMoviesSource : LocalMoviesSource {
         private val cacheMovies: MutableList<Movie> = mutableListOf()
@@ -23,7 +23,7 @@ class TestRepository {
     }
 
     class ImplExternalMoviesSource: ExternalMoviesSource {
-        val Movie1 = Movie(
+        private val movie1 = Movie(
             1,
             "title",
             "overview",
@@ -35,7 +35,7 @@ class TestRepository {
             0.0,
             0.0
         )
-        val Movie2 = Movie(
+        private val movie2 = Movie(
             2,
             "title2",
             "overview2",
@@ -47,7 +47,7 @@ class TestRepository {
             0.0,
             0.0
         )
-        val Movie3 = Movie(
+        private val movie3 = Movie(
             3,
             "title3",
             "overview3",
@@ -62,15 +62,15 @@ class TestRepository {
 
         override suspend fun getPopularMovies(): List<Movie> {
             // Simulating an external call
-            return listOf(Movie1, Movie2, Movie3)
+            return listOf(movie1, movie2, movie3)
         }
 
         override suspend fun getMovieDetails(id: Int): Movie {
             // Simulating an external call
             return when (id) {
-                1 -> Movie1
-                2 -> Movie2
-                3 -> Movie3
+                1 -> movie1
+                2 -> movie2
+                3 -> movie3
                 else -> throw Exception("Movie not found")
             }
         }
@@ -106,7 +106,7 @@ class TestRepository {
      fun `getPopularMovies should return cached movies when available`() = runTest{
         // arrange
         val localMoviesSource = ImplLocalMoviesSource()
-        localMoviesSource.setMovies(listOf(Movie1, Movie2))
+        localMoviesSource.setMovies(listOf(movie1, movie2))
         val externalMoviesSource = ImplExternalMoviesSource()
         val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
 
@@ -114,7 +114,7 @@ class TestRepository {
         val result = moviesRepository.getPopularMovies()
 
         // assert
-        assert(result == listOf(Movie1, Movie2))
+        assert(result == listOf(movie1, movie2))
     }
 
     @Test
@@ -128,7 +128,7 @@ class TestRepository {
         val result = moviesRepository.getPopularMovies()
 
         // assert
-        assert(result == listOf(Movie1, Movie2, Movie3))
+        assert(result == listOf(movie1, movie2, movie3))
     }
 
     @Test
@@ -142,7 +142,7 @@ class TestRepository {
         val result = moviesRepository.getMovieDetails(1)
 
         // assert
-        assert(result == Movie1)
+        assert(result == movie1)
     }
 
     @Test

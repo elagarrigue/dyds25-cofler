@@ -5,7 +5,7 @@ import kotlin.test.Test
 import kotlinx.coroutines.test.runTest
 
 
-class TestGetPopularMoviesUseCase {
+class GetPopularMoviesUseCaseTest {
     private val movie1 = Movie(1, "title1", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 5.0, 7.0)
     private val movie2 = Movie(2, "title2", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 4.0, 5.0)
     private val movie3 = Movie(3, "title3", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 6.0, 8.5)
