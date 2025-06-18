@@ -4,7 +4,7 @@ import edu.dyds.movies.domain.repository.MoviesRepository
 import kotlin.test.Test
 import kotlinx.coroutines.test.runTest
 
-class GetMovieDetailUseCaseTest {
+class TestGetMovieDetailUseCase {
     private val movie1 = Movie(1, "title", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 5.0, 6.0)
 
     class FakeRepository(private val movie: Movie) : MoviesRepository {

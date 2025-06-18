@@ -1,11 +1,10 @@
 import edu.dyds.movies.domain.usecase.GetPopularMoviesUseCaseImpl
 import edu.dyds.movies.domain.entity.Movie
-import edu.dyds.movies.domain.entity.QualifiedMovie
 import edu.dyds.movies.domain.repository.MoviesRepository
 import kotlin.test.Test
 import kotlinx.coroutines.test.runTest
 
-class GetPopularMoviesUseCaseTest {
+class TestGetPopularMoviesUseCase {
 
     private val movie1 = Movie(1, "title1", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 5.0, 7.0)
     private val movie2 = Movie(2, "title2", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 4.0, 5.0)
@@ -29,8 +28,8 @@ class GetPopularMoviesUseCaseTest {
         assert(result.size == 3)
         assert(result[0].movie == movie3) // Mayor voto
         assert(result[0].isGoodMovie)
-        assert(!result[1].isGoodMovie) // movie2 con 5.0
-        assert(result[2].isGoodMovie)
+        assert(result[1].isGoodMovie)
+        assert(!result[2].isGoodMovie) // movie2 con 5.0
     }
 
     @Test
