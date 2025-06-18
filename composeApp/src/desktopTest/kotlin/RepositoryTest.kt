@@ -11,7 +11,7 @@ class RepositoryTest {
     private val movie2 = Movie(2, "title2", "overview2", "releaseDate2", "poster2", "backdrop2", "originalTitle2", "originalLanguage2", 0.0, 0.0)
     private val movie3 = Movie(3, "title3", "overview3", "releaseDate3", "poster3", "backdrop3", "originalTitle3", "originalLanguage3", 0.0, 0.0)
 
-    class ImplLocalMoviesSource : LocalMoviesSource {
+    class LocalMoviesSourceFake : LocalMoviesSource {
         private val cacheMovies: MutableList<Movie> = mutableListOf()
 
         override fun getMovies() = cacheMovies.toList()
@@ -22,43 +22,7 @@ class RepositoryTest {
         }
     }
 
-    class ImplExternalMoviesSource: ExternalMoviesSource {
-        private val movie1 = Movie(
-            1,
-            "title",
-            "overview",
-            "releaseDate",
-            "poster",
-            "backdrop",
-            "originalTitle",
-            "originalLanguage",
-            0.0,
-            0.0
-        )
-        private val movie2 = Movie(
-            2,
-            "title2",
-            "overview2",
-            "releaseDate2",
-            "poster2",
-            "backdrop2",
-            "originalTitle2",
-            "originalLanguage2",
-            0.0,
-            0.0
-        )
-        private val movie3 = Movie(
-            3,
-            "title3",
-            "overview3",
-            "releaseDate3",
-            "poster3",
-            "backdrop3",
-            "originalTitle3",
-            "originalLanguage3",
-            0.0,
-            0.0
-        )
+    class ExternalMoviesSourceFake(val movie1: Movie, val movie2: Movie, val movie3: Movie): ExternalMoviesSource {
 
         override suspend fun getPopularMovies(): List<Movie> {
             // Simulating an external call
@@ -76,8 +40,18 @@ class RepositoryTest {
         }
     }
 
-    class MoviesRepositoryImpl(
-        private val localMoviesSource: ImplLocalMoviesSource,
+    class ExternalMoviesSourceErrorFake : ExternalMoviesSource {
+        override suspend fun getPopularMovies(): List<Movie> {
+            throw Exception("External source error")
+        }
+
+        override suspend fun getMovieDetails(id: Int): Movie {
+            throw Exception("External source error")
+        }
+    }
+
+    class MoviesRepositoryFake(
+        private val localMoviesSource: LocalMoviesSourceFake,
         private val externalMoviesSource: ExternalMoviesSource
     ) : MoviesRepository {
 
@@ -104,75 +78,67 @@ class RepositoryTest {
 
     @Test
      fun `getPopularMovies should return cached movies when available`() = runTest{
-        // arrange
-        val localMoviesSource = ImplLocalMoviesSource()
-        localMoviesSource.setMovies(listOf(movie1, movie2))
-        val externalMoviesSource = ImplExternalMoviesSource()
-        val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
+        // ARRANGE
+        val localMoviesSource = LocalMoviesSourceFake()
+        localMoviesSource.setMovies(listOf(movie1, movie2, movie3))
+        val externalMoviesSource = ExternalMoviesSourceFake(movie1, movie2, movie3)
+        val moviesRepository = MoviesRepositoryFake(localMoviesSource, externalMoviesSource)
 
-        // act
+        // ACT
         val result = moviesRepository.getPopularMovies()
 
-        // assert
-        assert(result == listOf(movie1, movie2))
+        // ASSERT
+        assert(result == listOf(movie1, movie2, movie3))
     }
 
     @Test
     fun `getPopularMovies should fetch from external source when cache is empty`() = runTest {
-        // arrange
-        val localMoviesSource = ImplLocalMoviesSource()
-        val externalMoviesSource = ImplExternalMoviesSource()
-        val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
+        // ARRANGE
+        val localMoviesSource = LocalMoviesSourceFake()
+        val externalMoviesSource = ExternalMoviesSourceFake(movie1, movie2, movie3)
+        val moviesRepository = MoviesRepositoryFake(localMoviesSource, externalMoviesSource)
 
-        // act
+        // ACT
         val result = moviesRepository.getPopularMovies()
 
-        // assert
+        // ASSERT
         assert(result == listOf(movie1, movie2, movie3))
     }
 
     @Test
     fun `getMovieDetails should return movie details from external source`() = runTest {
-        // arrange
-        val localMoviesSource = ImplLocalMoviesSource()
-        val externalMoviesSource = ImplExternalMoviesSource()
-        val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
+        // ARRANGE
+        val localMoviesSource = LocalMoviesSourceFake()
+        val externalMoviesSource = ExternalMoviesSourceFake(movie1, movie2, movie3)
+        val moviesRepository = MoviesRepositoryFake(localMoviesSource, externalMoviesSource)
 
-        // act
+        // ACT
         val result = moviesRepository.getMovieDetails(1)
 
-        // assert
+        // ASSERT
         assert(result == movie1)
     }
 
     @Test
     fun `getMovieDetails should return null when movie not found`() = runTest {
-        // arrange
-        val localMoviesSource = ImplLocalMoviesSource()
-        val externalMoviesSource = ImplExternalMoviesSource()
-        val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
+        // ARRANGE
+        val localMoviesSource = LocalMoviesSourceFake()
+        val externalMoviesSource = ExternalMoviesSourceFake(movie1, movie2, movie3)
+        val moviesRepository = MoviesRepositoryFake(localMoviesSource, externalMoviesSource)
 
-        // act
+        // ACT
         val result = moviesRepository.getMovieDetails(999) // Non-existent movie ID
 
-        // assert
+        // ASSERT
         assert(result == null)
     }
-    //------------------------- Preguntar si podemos usar mocks ------------------------------//
+
     @Test
     fun `getPopularMovies should return empty list when external source fails`() = runTest {
         // arrange
-        val localMoviesSource = ImplLocalMoviesSource()
-        val externalMoviesSource = object : ExternalMoviesSource {
-            override suspend fun getPopularMovies(): List<Movie> {
-                throw Exception("External source error")
-            }
-
-            override suspend fun getMovieDetails(id: Int): Movie {
-                throw Exception("External source error")
-            }
-        }
-        val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
+        val localMoviesSource = LocalMoviesSourceFake()
+        val externalMoviesSource = ExternalMoviesSourceErrorFake()
+        val moviesRepository = MoviesRepositoryFake(localMoviesSource, externalMoviesSource)
 
         // act
         val result = moviesRepository.getPopularMovies()
@@ -180,5 +146,5 @@ class RepositoryTest {
         // assert
         assert(result.isEmpty())
     }
-    //--------------------------------------------------------------------------------------//
+
 }

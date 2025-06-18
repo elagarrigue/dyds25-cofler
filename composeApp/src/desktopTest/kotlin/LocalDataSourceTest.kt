@@ -15,7 +15,7 @@ class LocalDataSourceTest {
     private val movie4 = Movie(4, "title4", "overview4", "releaseDate4", "poster4", "backdrop4", "originalTitle4", "originalLanguage4", 0.0, 0.0)
     private val movie5 = Movie(5, "title5", "overview5", "releaseDate5", "poster5", "backdrop5", "originalTitle5", "originalLanguage5", 0.0, 0.0)
 
-    class LocalDataSourceImpl : LocalDataSource {
+    class LocalDataSourceFake : LocalDataSource {
         private val cacheMovies: MutableList<Movie> = mutableListOf()
 
         override fun getMovies() = cacheMovies.toList()
@@ -28,41 +28,41 @@ class LocalDataSourceTest {
 
     @Test
     fun `get movies should return cached movies`() {
-        // arrange
-        val localDataSource = LocalDataSourceImpl()
+        // ARRANGE
+        val localDataSource = LocalDataSourceFake()
         val initialMovies = listOf(movie1, movie2, movie3)
         localDataSource.setMovies(initialMovies)
 
-        // act
+        // ACT
         val result = localDataSource.getMovies()
 
-        // assert
+        // ASSERT
         assert(result == initialMovies)
     }
 
     @Test
     fun `set movies should update cached movies`() {
-        // arrange
-        val localDataSource = LocalDataSourceImpl()
+        // ARRANGE
+        val localDataSource = LocalDataSourceFake()
         val newMovies = listOf(movie4, movie5)
 
-        // act
+        // ACT
         localDataSource.setMovies(newMovies)
         val result = localDataSource.getMovies()
 
-        // assert
+        // ASSERT
         assert(result == newMovies)
     }
 
     @Test
     fun `get movies should return empty list when no movies are set`() {
-        // arrange
-        val localDataSource = LocalDataSourceImpl()
+        // ARRANGE
+        val localDataSource = LocalDataSourceFake()
 
-        // act
+        // ACT
         val result = localDataSource.getMovies()
 
-        // assert
+        // ASSERT
         assert(result.isEmpty())
     }
 }
