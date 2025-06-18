@@ -7,7 +7,6 @@ import kotlinx.coroutines.test.runTest
 
 
 class TestRepository {
-
     val Movie1 = Movie(1, "title", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 0.0, 0.0)
     val Movie2 = Movie(2, "title2", "overview2", "releaseDate2", "poster2", "backdrop2", "originalTitle2", "originalLanguage2", 0.0, 0.0)
     val Movie3 = Movie(3, "title3", "overview3", "releaseDate3", "poster3", "backdrop3", "originalTitle3", "originalLanguage3", 0.0, 0.0)
@@ -119,18 +118,18 @@ class TestRepository {
     }
 
     @Test
-        fun `getPopularMovies should fetch from external source when cache is empty`() = runTest {
-            // arrange
-            val localMoviesSource = ImplLocalMoviesSource()
-            val externalMoviesSource = ImplExternalMoviesSource()
-            val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
+    fun `getPopularMovies should fetch from external source when cache is empty`() = runTest {
+        // arrange
+        val localMoviesSource = ImplLocalMoviesSource()
+        val externalMoviesSource = ImplExternalMoviesSource()
+        val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
 
-            // act
-            val result = moviesRepository.getPopularMovies()
+        // act
+        val result = moviesRepository.getPopularMovies()
 
-            // assert
-            assert(result == listOf(Movie1, Movie2, Movie3))
-        }
+        // assert
+        assert(result == listOf(Movie1, Movie2, Movie3))
+    }
 
     @Test
     fun `getMovieDetails should return movie details from external source`() = runTest {
