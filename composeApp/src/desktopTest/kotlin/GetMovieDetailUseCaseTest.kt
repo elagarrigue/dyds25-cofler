@@ -5,21 +5,19 @@ import kotlin.test.Test
 import kotlinx.coroutines.test.runTest
 
 class GetMovieDetailUseCaseTest {
-    val movie1 = Movie(1, "title", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 5.0, 6.0)
+    private val movie1 = Movie(1, "title", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 5.0, 6.0)
 
-    class FakeRepository : MoviesRepository {
+    class FakeRepository(private val movie: Movie) : MoviesRepository {
         override suspend fun getPopularMovies(): List<Movie> = emptyList()
 
         override suspend fun getMovieDetails(id: Int): Movie? =
-            when (id) {
-                movie1.id-> movie1
-                else -> null
-            }
+            if (id == movie.id) movie else null
     }
+
     @Test
     fun `execute debe retornar una película válida si existe`() = runTest {
         // arrange
-        val repository = FakeRepository()
+        val repository = FakeRepository(movie1)
         val useCase = GetMovieDetailsUseCaseImpl(repository)
 
         // act
@@ -31,15 +29,14 @@ class GetMovieDetailUseCaseTest {
 
     @Test
     fun `execute debe retornar nulo si la pelicula no es valida`() = runTest {
-        //Arrange
-        val repository = FakeRepository()
+        // arrange
+        val repository = FakeRepository(movie1)
         val useCase = GetMovieDetailsUseCaseImpl(repository)
 
-        //Act
+        // act
         val result = useCase.execute(2)
 
-        //Assert
+        // assert
         assert(result == null)
-
     }
 }
