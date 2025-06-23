@@ -11,17 +11,6 @@ class LocalDataSourceTest {
     private val movie4 = Movie(4, "title4", "overview4", "releaseDate4", "poster4", "backdrop4", "originalTitle4", "originalLanguage4", 0.0, 0.0)
     private val movie5 = Movie(5, "title5", "overview5", "releaseDate5", "poster5", "backdrop5", "originalTitle5", "originalLanguage5", 0.0, 0.0)
 
-    class LocalDataSourceFake : LocalMoviesSource {
-        private val cacheMovies: MutableList<Movie> = mutableListOf()
-
-        override fun getMovies() = cacheMovies.toList()
-
-        override fun setMovies(movies: List<Movie>) {
-            cacheMovies.clear()
-            cacheMovies.addAll(movies)
-        }
-    }
-
     @Test
     fun `get movies should return cached movies`() {
         // ARRANGE
