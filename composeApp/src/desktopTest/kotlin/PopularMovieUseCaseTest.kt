@@ -29,6 +29,8 @@ class GetPopularMoviesUseCaseTest {
         //assert
         assert(result.size == 3)
         assert(result[0].movie == movie3) // Mayor voto
+        assert(result[1].movie == movie1)
+        assert(result[2].movie == movie2)
         assert(result[0].isGoodMovie)
         assert(result[1].isGoodMovie)
         assert(!result[2].isGoodMovie) // movie2 con 5.0
