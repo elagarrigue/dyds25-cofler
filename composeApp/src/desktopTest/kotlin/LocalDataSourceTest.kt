@@ -1,6 +1,5 @@
 import edu.dyds.movies.domain.entity.Movie
 import kotlin.test.Test
-import edu.dyds.movies.data.local.LocalMoviesSource
 import edu.dyds.movies.data.local.LocalMoviesImpl
 
 

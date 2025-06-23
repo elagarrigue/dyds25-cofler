@@ -1,7 +1,6 @@
 import edu.dyds.movies.data.MoviesRepositoryImpl
 import kotlin.test.Test
 import edu.dyds.movies.domain.entity.Movie
-import edu.dyds.movies.domain.repository.MoviesRepository
 import edu.dyds.movies.data.local.LocalMoviesSource
 import edu.dyds.movies.data.external.ExternalMoviesSource
 import kotlinx.coroutines.test.runTest
