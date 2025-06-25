@@ -1,6 +1,6 @@
+import edu.dyds.movies.data.MoviesRepositoryImpl
 import kotlin.test.Test
 import edu.dyds.movies.domain.entity.Movie
-import edu.dyds.movies.domain.repository.MoviesRepository
 import edu.dyds.movies.data.local.LocalMoviesSource
 import edu.dyds.movies.data.external.ExternalMoviesSource
 import kotlinx.coroutines.test.runTest
@@ -50,39 +50,13 @@ class RepositoryTest {
         }
     }
 
-    class MoviesRepositoryFake(
-        private val localMoviesSource: LocalMoviesSourceFake,
-        private val externalMoviesSource: ExternalMoviesSource
-    ) : MoviesRepository {
-
-        override suspend fun getPopularMovies(): List<Movie> {
-            val localMovies = localMoviesSource.getMovies()
-            return localMovies.ifEmpty {
-                try {
-                    externalMoviesSource.getPopularMovies().apply {
-                        localMoviesSource.setMovies(this)
-                    }
-                } catch (e: Exception) {
-                    emptyList()
-                }
-            }
-        }
-
-        override suspend fun getMovieDetails(id: Int): Movie? =
-            try {
-                externalMoviesSource.getMovieDetails(id)
-            } catch (e: Exception) {
-                null
-            }
-    }
-
     @Test
      fun `getPopularMovies should return cached movies when available`() = runTest{
         // ARRANGE
         val localMoviesSource = LocalMoviesSourceFake()
         localMoviesSource.setMovies(listOf(movie1, movie2, movie3))
         val externalMoviesSource = ExternalMoviesSourceFake(movie1, movie2, movie3)
-        val moviesRepository = MoviesRepositoryFake(localMoviesSource, externalMoviesSource)
+        val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
 
         // ACT
         val result = moviesRepository.getPopularMovies()
@@ -96,7 +70,7 @@ class RepositoryTest {
         // ARRANGE
         val localMoviesSource = LocalMoviesSourceFake()
         val externalMoviesSource = ExternalMoviesSourceFake(movie1, movie2, movie3)
-        val moviesRepository = MoviesRepositoryFake(localMoviesSource, externalMoviesSource)
+        val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
 
         // ACT
         val result = moviesRepository.getPopularMovies()
@@ -110,7 +84,7 @@ class RepositoryTest {
         // ARRANGE
         val localMoviesSource = LocalMoviesSourceFake()
         val externalMoviesSource = ExternalMoviesSourceFake(movie1, movie2, movie3)
-        val moviesRepository = MoviesRepositoryFake(localMoviesSource, externalMoviesSource)
+        val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
 
         // ACT
         val result = moviesRepository.getMovieDetails(1)
@@ -124,7 +98,7 @@ class RepositoryTest {
         // ARRANGE
         val localMoviesSource = LocalMoviesSourceFake()
         val externalMoviesSource = ExternalMoviesSourceFake(movie1, movie2, movie3)
-        val moviesRepository = MoviesRepositoryFake(localMoviesSource, externalMoviesSource)
+        val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
 
         // ACT
         val result = moviesRepository.getMovieDetails(999) // Non-existent movie ID
@@ -138,7 +112,7 @@ class RepositoryTest {
         // arrange
         val localMoviesSource = LocalMoviesSourceFake()
         val externalMoviesSource = ExternalMoviesSourceErrorFake()
-        val moviesRepository = MoviesRepositoryFake(localMoviesSource, externalMoviesSource)
+        val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
 
         // act
         val result = moviesRepository.getPopularMovies()
