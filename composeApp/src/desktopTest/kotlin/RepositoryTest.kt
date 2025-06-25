@@ -4,6 +4,9 @@ import edu.dyds.movies.domain.entity.Movie
 import edu.dyds.movies.data.local.LocalMoviesSource
 import edu.dyds.movies.data.external.ExternalMoviesSource
 import kotlinx.coroutines.test.runTest
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 
 class RepositoryTest {
@@ -62,7 +65,7 @@ class RepositoryTest {
         val result = moviesRepository.getPopularMovies()
 
         // ASSERT
-        assert(result == listOf(movie1, movie2, movie3))
+        assertEquals(result, listOf(movie1, movie2, movie3))
     }
 
     @Test
@@ -76,7 +79,7 @@ class RepositoryTest {
         val result = moviesRepository.getPopularMovies()
 
         // ASSERT
-        assert(result == listOf(movie1, movie2, movie3))
+        assertEquals(result, listOf(movie1, movie2, movie3))
     }
 
     @Test
@@ -90,7 +93,7 @@ class RepositoryTest {
         val result = moviesRepository.getMovieDetails(1)
 
         // ASSERT
-        assert(result == movie1)
+        assertEquals(result, movie1)
     }
 
     @Test
@@ -104,7 +107,7 @@ class RepositoryTest {
         val result = moviesRepository.getMovieDetails(999) // Non-existent movie ID
 
         // ASSERT
-        assert(result == null)
+        assertNull(result)
     }
 
     @Test
@@ -118,7 +121,7 @@ class RepositoryTest {
         val result = moviesRepository.getPopularMovies()
 
         // assert
-        assert(result.isEmpty())
+        assertTrue(result.isEmpty())
     }
 
 }

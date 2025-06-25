@@ -1,6 +1,9 @@
 import edu.dyds.movies.domain.entity.Movie
 import kotlin.test.Test
 import edu.dyds.movies.data.local.LocalMoviesImpl
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 
 class LocalDataSourceTest {
@@ -21,7 +24,7 @@ class LocalDataSourceTest {
         val result = localDataSource.getMovies()
 
         // ASSERT
-        assert(result == initialMovies)
+        assertEquals(result, initialMovies)
     }
 
     @Test
@@ -35,7 +38,7 @@ class LocalDataSourceTest {
         val result = localDataSource.getMovies()
 
         // ASSERT
-        assert(result == newMovies)
+        assertEquals(result, newMovies)
     }
 
     @Test
@@ -47,6 +50,6 @@ class LocalDataSourceTest {
         val result = localDataSource.getMovies()
 
         // ASSERT
-        assert(result.isEmpty())
+        assertTrue(result.isEmpty())
     }
 }
