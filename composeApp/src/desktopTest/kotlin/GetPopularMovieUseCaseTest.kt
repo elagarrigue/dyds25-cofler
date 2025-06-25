@@ -2,10 +2,13 @@ import edu.dyds.movies.domain.usecase.GetPopularMoviesUseCaseImpl
 import edu.dyds.movies.domain.entity.Movie
 import edu.dyds.movies.domain.repository.MoviesRepository
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import kotlin.test.assertFalse
 import kotlinx.coroutines.test.runTest
 
-
 class GetPopularMoviesUseCaseTest {
+
     private val movie1 = Movie(1, "title1", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 5.0, 7.0)
     private val movie2 = Movie(2, "title2", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 4.0, 5.0)
     private val movie3 = Movie(3, "title3", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 6.0, 8.5)
@@ -17,35 +20,34 @@ class GetPopularMoviesUseCaseTest {
 
     @Test
     fun `execute debe ordenar por voteAverage descendente y calificar correctamente`() = runTest {
-        //arrange
+        // Arrange
         val repository = FakeRepository(listOf(movie1, movie2, movie3))
         val useCase = GetPopularMoviesUseCaseImpl(repository)
 
-        //act
+        // Act
         val result = useCase.execute()
 
-        println("Result: $result")
+        // Assert
+        assertEquals(3, result.size)
+        assertEquals(movie3, result[0].movie) // Mayor voto
+        assertEquals(movie1, result[1].movie)
+        assertEquals(movie2, result[2].movie)
 
-        //assert
-        assert(result.size == 3)
-        assert(result[0].movie == movie3) // Mayor voto
-        assert(result[1].movie == movie1)
-        assert(result[2].movie == movie2)
-        assert(result[0].isGoodMovie)
-        assert(result[1].isGoodMovie)
-        assert(!result[2].isGoodMovie) // movie2 con 5.0
+        assertTrue(result[0].isGoodMovie)
+        assertTrue(result[1].isGoodMovie)
+        assertFalse(result[2].isGoodMovie) // movie2 con 5.0
     }
 
     @Test
     fun `execute debe retornar lista vacia si no hay peliculas`() = runTest {
-       //arrange
+        // Arrange
         val repository = FakeRepository(emptyList())
         val useCase = GetPopularMoviesUseCaseImpl(repository)
 
-        //act
+        // Act
         val result = useCase.execute()
 
-        //assert
-        assert(result.isEmpty())
+        // Assert
+        assertTrue(result.isEmpty())
     }
 }
