@@ -2,7 +2,6 @@ import edu.dyds.movies.domain.entity.Movie
 import kotlin.test.Test
 import edu.dyds.movies.data.local.LocalMoviesImpl
 import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 
