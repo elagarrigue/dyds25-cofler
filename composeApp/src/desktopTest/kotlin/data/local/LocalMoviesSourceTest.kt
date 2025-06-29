@@ -1,3 +1,5 @@
+package data.local
+
 import edu.dyds.movies.domain.entity.Movie
 import kotlin.test.Test
 import edu.dyds.movies.data.local.LocalMoviesImpl
@@ -5,7 +7,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 
-class LocalDataSourceTest {
+class LocalMoviesSourceTest {
     private val movie1 = Movie(1, "title", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 0.0, 0.0)
     private val movie2 = Movie(2, "title2", "overview2", "releaseDate2", "poster2", "backdrop2", "originalTitle2", "originalLanguage2", 0.0, 0.0)
     private val movie3 = Movie(3, "title3", "overview3", "releaseDate3", "poster3", "backdrop3", "originalTitle3", "originalLanguage3", 0.0, 0.0)

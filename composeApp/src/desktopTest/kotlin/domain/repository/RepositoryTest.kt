@@ -1,3 +1,5 @@
+package domain.repository
+
 import edu.dyds.movies.data.MoviesRepositoryImpl
 import kotlin.test.Test
 import edu.dyds.movies.domain.entity.Movie
