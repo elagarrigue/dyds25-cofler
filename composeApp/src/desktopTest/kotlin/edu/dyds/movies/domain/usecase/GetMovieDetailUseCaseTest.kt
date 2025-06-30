@@ -1,6 +1,5 @@
-package domain.usecase
+package edu.dyds.movies.domain.usecase
 
-import edu.dyds.movies.domain.usecase.GetMovieDetailsUseCaseImpl
 import edu.dyds.movies.domain.entity.Movie
 import edu.dyds.movies.domain.repository.MoviesRepository
 import kotlin.test.Test

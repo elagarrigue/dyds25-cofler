@@ -1,11 +1,9 @@
-package data.local
+package edu.dyds.movies.data.local
 
 import edu.dyds.movies.domain.entity.Movie
 import kotlin.test.Test
-import edu.dyds.movies.data.local.LocalMoviesImpl
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-
 
 class LocalMoviesSourceTest {
     private val movie1 = Movie(1, "title", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 0.0, 0.0)

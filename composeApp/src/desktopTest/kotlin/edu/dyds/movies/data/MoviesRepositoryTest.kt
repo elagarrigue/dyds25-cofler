@@ -1,6 +1,5 @@
-package domain.repository
+package edu.dyds.movies.data
 
-import edu.dyds.movies.data.MoviesRepositoryImpl
 import kotlin.test.Test
 import edu.dyds.movies.domain.entity.Movie
 import edu.dyds.movies.data.local.LocalMoviesSource
@@ -11,7 +10,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 
-class RepositoryTest {
+class MoviesRepositoryTest {
     private val movie1 = Movie(1, "title", "overview", "releaseDate", "poster", "backdrop", "originalTitle", "originalLanguage", 0.0, 0.0)
     private val movie2 = Movie(2, "title2", "overview2", "releaseDate2", "poster2", "backdrop2", "originalTitle2", "originalLanguage2", 0.0, 0.0)
     private val movie3 = Movie(3, "title3", "overview3", "releaseDate3", "poster3", "backdrop3", "originalTitle3", "originalLanguage3", 0.0, 0.0)
@@ -27,7 +26,7 @@ class RepositoryTest {
         }
     }
 
-    class ExternalMoviesSourceFake(val movie1: Movie, val movie2: Movie, val movie3: Movie): ExternalMoviesSource {
+    class ExternalMoviesSourceFake(private val movie1: Movie, private val movie2: Movie, private val movie3: Movie): ExternalMoviesSource {
 
         override suspend fun getPopularMovies(): List<Movie> {
             // Simulating an external call

@@ -1,9 +1,7 @@
-package presentation.home
+package edu.dyds.movies.presentation.detail
 
 import edu.dyds.movies.domain.entity.Movie
-import edu.dyds.movies.domain.entity.QualifiedMovie
-import edu.dyds.movies.domain.usecase.GetPopularMoviesUseCase
-import edu.dyds.movies.presentation.home.HomeViewModel
+import edu.dyds.movies.domain.usecase.GetMovieDetailsUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,7 +16,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class HomeViewModelTest {
+class DetailViewModelTest {
     private val testDispatcher = UnconfinedTestDispatcher()
     private val testScope = CoroutineScope(testDispatcher)
 
@@ -32,48 +30,47 @@ class HomeViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private val getPopularMoviesUseCase = object : GetPopularMoviesUseCase {
-        override suspend fun execute(): List<QualifiedMovie> {
-            return listOf(QualifiedMovie(Movie(
-                1,
-                "Movie 1",
-                "the movie 1 overview",
+    private val getMovieDetailsUseCase = object : GetMovieDetailsUseCase {
+        override suspend fun execute(id: Int): Movie {
+            return Movie(
+                id,
+                "Movie $id",
+                "the movie $id overview",
                 "21/10/2023",
                 "poster url",
                 "backdrop url",
-                "Original Movie 1",
+                "Original Movie $id",
                 "en",
                 10.0,
-                8.0)
-            , isGoodMovie = true
-            ))
+                8.0
+            )
         }
     }
 
     @Test
     fun `get movie should emit loading and data states`() = runTest {
         // Arrange
-        val homeViewModel = HomeViewModel(getPopularMoviesUseCase)
+        val detailViewModel = DetailViewModel(getMovieDetailsUseCase)
 
-        val events: ArrayList<HomeViewModel.UiState> = arrayListOf()
+        val events: ArrayList<DetailViewModel.UiState> = arrayListOf()
         testScope.launch {
-            homeViewModel.moviesStateFlow.collect { state ->
+            detailViewModel.movieDetailStateFlow.collect { state ->
                 events.add(state)
             }
         }
 
         // Act
-        homeViewModel.getAllMovies()
+        detailViewModel.getMovieDetail(1)
 
         // Assert
         assertEquals(
-            expected = HomeViewModel.UiState(isLoading = true, movies = emptyList()),
+            expected = DetailViewModel.UiState(isLoading = true, movie = null),
             actual = events[0]
         )
         assertEquals(
-            expected = HomeViewModel.UiState(
+            expected = DetailViewModel.UiState(
                 isLoading = false,
-                listOf(QualifiedMovie(Movie(
+                movie = Movie(
                     1,
                     "Movie 1",
                     "the movie 1 overview",
@@ -83,9 +80,8 @@ class HomeViewModelTest {
                     "Original Movie 1",
                     "en",
                     10.0,
-                    8.0)
-                    , isGoodMovie = true
-                ))
+                    8.0
+                )
             ),
             actual = events[1]
         )
