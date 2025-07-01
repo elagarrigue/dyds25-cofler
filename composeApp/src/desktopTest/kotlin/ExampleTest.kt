@@ -7,7 +7,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class TestExample {
+class ExampleTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val testScope = CoroutineScope(UnconfinedTestDispatcher())
