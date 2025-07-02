@@ -60,7 +60,7 @@ class DetailViewModelTest {
         }
 
         // Act
-        detailViewModel.getMovieDetail(1)
+        detailViewModel.getMovieByTitle(1)
 
         // Assert
         assertEquals(

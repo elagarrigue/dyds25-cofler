@@ -16,7 +16,7 @@ class GetMovieDetailUseCaseTest {
 
     class FakeRepository(private val movie: Movie) : MoviesRepository {
         override suspend fun getPopularMovies(): List<Movie> = emptyList()
-        override suspend fun getMovieDetails(id: Int): Movie? =
+        override suspend fun getMovieByTitle(id: Int): Movie? =
             if (id == movie.id) movie else null
     }
 

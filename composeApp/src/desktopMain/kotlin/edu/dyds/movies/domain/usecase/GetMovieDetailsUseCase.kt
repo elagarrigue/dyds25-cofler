@@ -4,11 +4,11 @@ import edu.dyds.movies.domain.entity.Movie
 import edu.dyds.movies.domain.repository.MoviesRepository
 
 interface GetMovieDetailsUseCase {
-    suspend fun execute(id: Int): Movie?
+    suspend fun execute(title: String): Movie?
 }
 
 internal class GetMovieDetailsUseCaseImpl(private val repository: MoviesRepository) : GetMovieDetailsUseCase {
-    override suspend fun execute(id: Int) = repository.getMovieDetails(id)
+    override suspend fun execute(title: String) = repository.getMovieByTitle(title)
 }
 
 

@@ -91,7 +91,7 @@ class MoviesRepositoryTest {
         val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
 
         // ACT
-        val result = moviesRepository.getMovieDetails(1)
+        val result = moviesRepository.getMovieByTitle(1)
 
         // ASSERT
         assertEquals(result, movie1)
@@ -105,7 +105,7 @@ class MoviesRepositoryTest {
         val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
 
         // ACT
-        val result = moviesRepository.getMovieDetails(999) // Non-existent movie ID
+        val result = moviesRepository.getMovieByTitle(999) // Non-existent movie ID
 
         // ASSERT
         assertNull(result)

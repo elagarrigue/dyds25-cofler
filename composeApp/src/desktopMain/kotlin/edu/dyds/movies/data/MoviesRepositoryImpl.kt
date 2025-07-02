@@ -20,9 +20,9 @@ class MoviesRepositoryImpl(private val localMoviesSource: LocalMoviesSource, pri
         }
     }
 
-    override suspend fun getMovieDetails(id: Int) =
+    override suspend fun getMovieByTitle(title: String) =
         try {
-            externalMoviesSource.getMovieDetails(id)
+            externalMoviesSource.getMovieByTitle(title)
         } catch (e: Exception) {
             null
         }
