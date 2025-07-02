@@ -1,5 +1,6 @@
-package edu.dyds.movies.data.external
+package edu.dyds.movies.data.external.tmdb
 
+import edu.dyds.movies.data.external.RemoteResult
 import edu.dyds.movies.domain.entity.Movie
 
 import io.ktor.client.*
@@ -11,7 +12,7 @@ interface ExternalMoviesSource {
     suspend fun getMovieByTitle(title: String): Movie
 }
 
-internal class TMDBExternalMoviesImpl(private val tmdbHttpClient: HttpClient) : ExternalMoviesSource {
+internal class TMDBExternalMoviesSource(private val tmdbHttpClient: HttpClient) : ExternalMoviesSource {
     override suspend fun getPopularMovies(): List<Movie> = getTMDBPopularMovies().results.map { it.toDomainMovie()}
 
     override suspend fun getMovieByTitle(title: String): Movie = getTMDBMovieDetails(title).apply{println(this)}.results.first().toDomainMovie()

@@ -3,7 +3,7 @@ package edu.dyds.movies.data
 import kotlin.test.Test
 import edu.dyds.movies.domain.entity.Movie
 import edu.dyds.movies.data.local.LocalMoviesSource
-import edu.dyds.movies.data.external.ExternalMoviesSource
+import edu.dyds.movies.data.external.tmdb.ExternalMoviesSource
 import kotlinx.coroutines.test.runTest
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
