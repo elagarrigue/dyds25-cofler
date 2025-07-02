@@ -16,8 +16,8 @@ class GetMovieDetailUseCaseTest {
 
     class FakeRepository(private val movie: Movie) : MoviesRepository {
         override suspend fun getPopularMovies(): List<Movie> = emptyList()
-        override suspend fun getMovieByTitle(id: Int): Movie? =
-            if (id == movie.id) movie else null
+        override suspend fun getMovieByTitle(title: String): Movie? =
+            if (title == movie.title) movie else null
     }
 
     @Test
@@ -27,7 +27,7 @@ class GetMovieDetailUseCaseTest {
         val useCase = GetMovieDetailsUseCaseImpl(repository)
 
         // Act
-        val result = useCase.execute(1)
+        val result = useCase.execute("title")
 
         // Assert
         assertEquals(movie1, result)
@@ -40,7 +40,7 @@ class GetMovieDetailUseCaseTest {
         val useCase = GetMovieDetailsUseCaseImpl(repository)
 
         // Act
-        val result = useCase.execute(2)
+        val result = useCase.execute("title2")
 
         // Assert
         assertNull(result)

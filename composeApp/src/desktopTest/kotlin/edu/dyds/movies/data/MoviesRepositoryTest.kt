@@ -33,12 +33,12 @@ class MoviesRepositoryTest {
             return listOf(movie1, movie2, movie3)
         }
 
-        override suspend fun getMovieDetails(id: Int): Movie {
-            // Simulating an external call
-            return when (id) {
-                1 -> movie1
-                2 -> movie2
-                3 -> movie3
+        override suspend fun getMovieByTitle(title: String): Movie {
+            // Simulando una llamada externa
+            return when (title) {
+                movie1.title -> movie1
+                movie2.title -> movie2
+                movie3.title -> movie3
                 else -> throw Exception("Movie not found")
             }
         }
@@ -49,7 +49,7 @@ class MoviesRepositoryTest {
             throw Exception("External source error")
         }
 
-        override suspend fun getMovieDetails(id: Int): Movie {
+        override suspend fun getMovieByTitle(title: String): Movie {
             throw Exception("External source error")
         }
     }
@@ -84,14 +84,14 @@ class MoviesRepositoryTest {
     }
 
     @Test
-    fun `getMovieDetails should return movie details from external source`() = runTest {
+    fun `getMovieByTitle should return movie details from external source`() = runTest {
         // ARRANGE
         val localMoviesSource = LocalMoviesSourceFake()
         val externalMoviesSource = ExternalMoviesSourceFake(movie1, movie2, movie3)
         val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
 
         // ACT
-        val result = moviesRepository.getMovieByTitle(1)
+        val result = moviesRepository.getMovieByTitle(movie1.title)
 
         // ASSERT
         assertEquals(result, movie1)
@@ -105,7 +105,7 @@ class MoviesRepositoryTest {
         val moviesRepository = MoviesRepositoryImpl(localMoviesSource, externalMoviesSource)
 
         // ACT
-        val result = moviesRepository.getMovieByTitle(999) // Non-existent movie ID
+        val result = moviesRepository.getMovieByTitle("title999") // Non-existent movie title
 
         // ASSERT
         assertNull(result)
