@@ -16,7 +16,7 @@ interface ExternalMovieDetailSource{
 }
 
 
-internal class TMDBExternalMoviesSource(private val tmdbHttpClient: HttpClient) : ExternalPopularMoviesSource, ExternalMovieDetailSource {
+public class TMDBExternalMoviesSource(private val tmdbHttpClient: HttpClient) : ExternalPopularMoviesSource, ExternalMovieDetailSource {
     override suspend fun getPopularMovies(): List<Movie> = getTMDBPopularMovies().results.map { it.toDomainMovie()}
 
     override suspend fun getMovieByTitle(title: String): Movie = getTMDBMovieDetails(title).apply{println(this)}.results.first().toDomainMovie()
