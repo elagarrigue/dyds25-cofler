@@ -9,25 +9,27 @@ class MoviesDetailBroker(
 ) : ExternalMovieDetailSource {
 
     override suspend fun getMovieByTitle(title: String): Movie? {
-        val tmdb = try {
-            tmdbSource.getMovieByTitle(title)
-        } catch (e: Exception) {
-            null
-        }
-        val omdb = try {
-            omdbSource.getMovieByTitle(title)
-        } catch (e: Exception) {
-            null
-        }
+        val tmdb = safeFetch { tmdbSource.getMovieByTitle(title) }
+        val omdb = safeFetch { omdbSource.getMovieByTitle(title) }
 
-        val movie = when {
+        return combineSources(tmdb, omdb)
+    }
+
+    private suspend fun safeFetch(fetch: suspend () -> Movie?): Movie? {
+        return try {
+            fetch()
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun combineSources(tmdb: Movie?, omdb: Movie?): Movie? {
+        return when {
             tmdb != null && omdb != null -> buildMovie(tmdb, omdb)
             tmdb != null -> tmdb.copy(overview = "TMDB: ${tmdb.overview}")
             omdb != null -> omdb.copy(overview = "OMDB: ${omdb.overview}")
             else -> null
         }
-
-        return movie
     }
 
     private fun buildMovie(

@@ -101,4 +101,53 @@ class MoviesDetailBrokerTest {
 
         Assert.assertNull(result)
     }
+
+    class ExceptionThrowingSource(private val throwOnCall: Boolean, private val movie: Movie? = null) : ExternalMovieDetailSource {
+        override suspend fun getMovieByTitle(title: String): Movie? {
+            if (throwOnCall) throw RuntimeException("Simulated failure")
+            return movie
+        }
+    }
+
+    @Test
+    fun `when TMDB throws exception should return OMDB data only`() {
+        val broker = MoviesDetailBroker(
+            tmdbSource = ExceptionThrowingSource(throwOnCall = true),
+            omdbSource = ExceptionThrowingSource(throwOnCall = false, movie = omdbMovie)
+        )
+
+        val result = kotlinx.coroutines.runBlocking {
+            broker.getMovieByTitle("Avatar")
+        }
+
+        Assert.assertEquals("OMDB: ${omdbMovie.overview}", result?.overview)
+    }
+
+    @Test
+    fun `when OMDB throws exception should return TMDB data only`() {
+        val broker = MoviesDetailBroker(
+            tmdbSource = ExceptionThrowingSource(throwOnCall = false, movie = tmdbMovie),
+            omdbSource = ExceptionThrowingSource(throwOnCall = true)
+        )
+
+        val result = kotlinx.coroutines.runBlocking {
+            broker.getMovieByTitle("Avatar")
+        }
+
+        Assert.assertEquals("TMDB: ${tmdbMovie.overview}", result?.overview)
+    }
+
+    @Test
+    fun `when both sources throw exception should return null`() {
+        val broker = MoviesDetailBroker(
+            tmdbSource = ExceptionThrowingSource(true),
+            omdbSource = ExceptionThrowingSource(true)
+        )
+
+        val result = kotlinx.coroutines.runBlocking {
+            broker.getMovieByTitle("Avatar")
+        }
+
+        Assert.assertNull(result)
+    }
 }
