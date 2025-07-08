@@ -12,12 +12,12 @@ class DetailViewModel(private val getMovieDetailsUseCase: GetMovieDetailsUseCase
     private val movieDetailStateMutableStateFlow = MutableStateFlow(UiState())
     val movieDetailStateFlow: Flow<UiState> = movieDetailStateMutableStateFlow
 
-    fun getMovieDetail(id: Int) {
+    fun getMovieByTitle(title: String) {
         viewModelScope.launch {
             movieDetailStateMutableStateFlow.emit(
                 UiState(
                     isLoading = false,
-                    movie = getMovieDetailsUseCase.execute(id)
+                    movie = getMovieDetailsUseCase.execute(title)
                 )
             )
         }
